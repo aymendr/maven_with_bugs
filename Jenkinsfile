@@ -13,16 +13,10 @@ pipeline {
                 git branch: params.BRANCHE , url: 'https://github.com/aymendr/maven_with_bugs.git'
             }
         }
-        stage('Checkout Code && Build Maven') {
+        stage('Build Maven') {
             steps {
-                script{
-                    switch(params.BRANCHE){
-                        case "main": sh "mvn -DskipTests clean package";break
-                        case "stage": sh "mvn -DskipTests clean package";break
-                    }
-                    // Run Maven on a Unix agent.
-                }
-            }
+                sh "mvn -DskipTests clean package"
+               }
         }
         /*stage('SonarQube Analysis') {
             steps {
@@ -38,7 +32,7 @@ pipeline {
             steps {
                 // Execute SonarQube analysis
                 script {
-                    def scannerHome = tool 'sonar_scanner'
+                    def scannerHome = tool 'sonar_scanner_tool'
                     withSonarQubeEnv('sonar_server') {
                         sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
                         -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/"
